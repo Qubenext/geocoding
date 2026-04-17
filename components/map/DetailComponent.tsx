@@ -1,16 +1,8 @@
 import { Card } from "@/components/ui/card";
-import { DataItem } from "../partials/detail";
+import { ListItem } from "../partials/detail";
+import {IDataList} from "@/types/map.type";
 
-interface ICollection {
-    id: number;
-    coordinates: string;
-    address: string;
-    floor: string;
-    apartment: string;
-    unit: string;
-}
-
-export default function DetailComponent({ collection }: { collection: ICollection[] }) {
+export default function DetailComponent({ collection }: { collection: IDataList[] }) {
     return (
         <div className="flex-1 overflow-y-auto space-y-4 pr-2 pb-2">
             {collection.map((item) => (
@@ -25,12 +17,12 @@ export default function DetailComponent({ collection }: { collection: ICollectio
                         </span>
                     </div>
                     <div className="space-y-2 text-sm text-zinc-800 dark:text-zinc-200">
-                        <DataItem label="coordinates" value={item.coordinates} />
-                        <DataItem label="address" value={item.address} />
+                        <ListItem label="coordinates" value={item.coordinates} />
+                        <ListItem label="address" value={item.address} />
                         <div className="grid grid-cols-3 gap-2 pt-2 border-t border-zinc-200 dark:border-zinc-800">
-                            <DataItem label="floor" value={item.floor} />
-                            <DataItem label="apartment" value={item.apartment} />
-                            <DataItem label="unit" value={item.unit} />
+                            <ListItem label="floor" value={item.floor} />
+                            <ListItem label="apartment" value={item.apartment} />
+                            <ListItem label="unit" value={item.unit} />
                         </div>
                     </div>
                 </Card>

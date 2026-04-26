@@ -135,4 +135,29 @@
   .maplibregl-popup-tip {
     @apply hidden!;
   }
+
+  .scrollbar-clean {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.439 0 0) transparent;
+  }
+
+  .scrollbar-clean::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .scrollbar-clean::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-clean::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, oklch(0.439 0 0) 60%, transparent);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  .scrollbar-clean::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, oklch(0.556 0 0) 70%, transparent);
+  }
 }

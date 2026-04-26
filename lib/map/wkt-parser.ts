@@ -23,7 +23,7 @@ export function parseWKT(wkt: string): Geometry | null {
   }
 
   // POLYGON ((ring1), (ring2), ...)
-  const polygonMatch = trimmed.match(/^POLYGON\s*\(\s*(.+)\s*\)$/is);
+  const polygonMatch = trimmed.match(/^POLYGON\s*\(\s*([\s\S]+)\s*\)$/i);
   if (polygonMatch) {
     const ringsStr = polygonMatch[1];
     const rings: Coordinate[][] = [];
@@ -44,7 +44,7 @@ export function parseWKT(wkt: string): Geometry | null {
   }
 
   // MULTIPOLYGON - basic support
-  const multiPolygonMatch = trimmed.match(/^MULTIPOLYGON\s*\(\s*(.+)\s*\)$/is);
+  const multiPolygonMatch = trimmed.match(/^MULTIPOLYGON\s*\(\s*([\s\S]+)\s*\)$/i);
   if (multiPolygonMatch) {
     const polygons: Coordinate[][][] = [];
     const outerRingRegex = /\(\s*(\([^)]+\)(?:\s*,\s*\([^)]+\))*)\s*\)/g;

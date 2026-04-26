@@ -15,6 +15,29 @@ import { useShapes } from "@/hooks/use-shapes";
 import { ShapesSidebar } from "./ShapesSidebar";
 import type { ShapeGeoFeature } from "@/types/map.type";
 
+function toShapeGeoFeature(feature: unknown): ShapeGeoFeature | null {
+  if (!feature || typeof feature !== "object") return null;
+
+  const maybeFeature = feature as {
+    id?: unknown;
+    properties?: {
+      id?: unknown;
+      name?: unknown;
+      description?: unknown;
+      shapeType?: unknown;
+    };
+  };
+
+  const props = maybeFeature.properties;
+  if (!props || typeof props !== "object") return null;
+  if (typeof props.id !== "string") return null;
+  if (typeof props.name !== "string") return null;
+  if (typeof props.description !== "string") return null;
+  if (typeof props.shapeType !== "string") return null;
+
+  return maybeFeature as ShapeGeoFeature;
+}
+
 // ─── Dark theme — mirrors MapCN default palette ──────────────────────────────
 const THEME = {
   polygonFill: "#3b82f6",
@@ -182,7 +205,11 @@ export function MapView() {
       setTooltip(null);
       return;
     }
-    const feature = features[0] as ShapeGeoFeature;
+    const feature = toShapeGeoFeature(features[0]);
+    if (!feature) {
+      setSelectedId(null);
+      return;
+    }
     const featureId = String(feature.id ?? feature.properties?.id ?? "");
     setSelectedId((prev) => (prev === featureId ? null : featureId));
   }, []);
@@ -191,8 +218,12 @@ export function MapView() {
   const handleMouseMove = useCallback((e: MapLayerMouseEvent) => {
     const features = e.features ?? [];
     if (!features.length) { setTooltip(null); return; }
-    const { name, shapeType, description } =
-      (features[0] as ShapeGeoFeature).properties ?? {};
+    const feature = toShapeGeoFeature(features[0]);
+    if (!feature) {
+      setTooltip(null);
+      return;
+    }
+    const { name, shapeType, description } = feature.properties;
     setTooltip({
       x: e.point.x,
       y: e.point.y,
@@ -235,7 +266,7 @@ export function MapView() {
 
   // ─────────────────────────────────────────────────────────────────────
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#0d1117]">
+    <div className="flex h-full w-full overflow-hidden bg-[#0d1117]">
       {/* Dark sidebar */}
       <ShapesSidebar
         features={(geojson?.features ?? []) as ShapeGeoFeature[]}
@@ -266,10 +297,10 @@ export function MapView() {
           {/* Render shapes only after map style is ready */}
           {geojson && isMapLoaded && (
             <Source id="shapes" type="geojson" data={geojson} promoteId="id">
-              <Layer {...polygonFillLayer} />
-              <Layer {...polygonOutlineLayer} />
-              <Layer {...pointCircleLayer} />
-              <Layer {...labelLayer} />
+              <Layer {...(polygonFillLayer as Parameters<typeof Layer>[0])} />
+              <Layer {...(polygonOutlineLayer as Parameters<typeof Layer>[0])} />
+              <Layer {...(pointCircleLayer as Parameters<typeof Layer>[0])} />
+              <Layer {...(labelLayer as Parameters<typeof Layer>[0])} />
             </Source>
           )}
         </Map>

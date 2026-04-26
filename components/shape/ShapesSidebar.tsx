@@ -48,7 +48,7 @@ export function ShapesSidebar({
         overflow-y-auto = native scroll, avoids ShadCN ScrollArea
         height-resolution issues inside constrained flex parents.
       */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-2 py-2 space-y-0.5">
+      <div className="scrollbar-clean flex-1 min-h-0 overflow-x-hidden overflow-y-auto px-2 py-2 space-y-0.5">
         {isLoading
           ? Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="flex items-center gap-2.5 px-2 py-2.5">

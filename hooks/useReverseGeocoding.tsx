@@ -14,6 +14,8 @@ export default function useReverseGeocoding() {
             const req = new Request(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
             const res = await fetch(req);
             const arr = await res.json();
+
+            console.log(arr)
             if (arr && arr.display_name) {
                 setResponse(arr.display_name);
             } else {
